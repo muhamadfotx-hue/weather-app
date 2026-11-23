@@ -623,6 +623,15 @@ body.stormy::before {
     color: #fff;
     background: none;
     -webkit-text-fill-color: #fff;
+
+     body.rainy::after,
+body.sunny::after,
+body.snowy::after,
+body.stormy::after,
+body.stormy::before {
+  display: none !important;
+  content: none !important;
+}
   }
 
   /* QIDIRUV */
