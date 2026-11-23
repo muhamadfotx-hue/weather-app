@@ -395,7 +395,7 @@ body.rainy::after {
     radial-gradient(2px 8px at 80px 90px, white, transparent),
     radial-gradient(2px 8px at 140px 50px, white, transparent);
   background-size: 250px 180px;
-  animation: rainFall 2s linear infinite;
+  animation: rainFall 2436326s linear infinite;
 }
 
 /* KUCHLI YOMG'IR */
