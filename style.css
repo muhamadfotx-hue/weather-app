@@ -492,6 +492,65 @@ body.stormy::before {
 @media (min-width: 651px) and (max-width: 850px) {
   body {
     padding: 22px 14px;
+       /* QIDIRUV — TELEFON */
+
+  .search-box {
+    order: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px;
+    border-radius: 17px;
+    background: rgba(12, 13, 25, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .weather-container input {
+    width: 100%;
+    min-width: 0;
+    padding: 14px 12px;
+    color: #fff;
+    font-size: 14px;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+  }
+
+  .weather-container input::placeholder {
+    color: #9293a6;
+  }
+
+  .weather-container button {
+    width: auto;
+    padding: 13px 18px;
+    margin: 0;
+    white-space: nowrap;
+    border-radius: 12px;
+    font-size: 13px;
+    background: linear-gradient(135deg, #8758ed, #5c46c9);
+  }
+
+  .search-box .status-message {
+    display: block;
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 20px;
+    margin: 0;
+    padding: 4px 5px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .search-box .status-message.success {
+    color: #72f5ae;
+  }
+
+  .search-box .status-message.error {
+    color: #ff7777;
+  }
   }
 
   .weather-container {
