@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#171027" />
+
+    <title>Weather App</title>
+
+    <!-- CSS ULANISHI -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <main class="weather-container">
+      <!-- SARLAVHA -->
+      <h1>Weather App 🌤️</h1>
+
+      <!-- SHAHAR QIDIRISH -->
+      <div class="search-box">
+        <input
+          type="text"
+          id="city"
+          placeholder="Shahar nomini kiriting..."
+          autocomplete="off"
+        />
+
+        <button id="searchBtn" type="button">Qidirish</button>
+      </div>
+
+      <!-- HOZIRGI OB-HAVO -->
+      <section id="weather">
+        <h2 id="cityName">Toshkent</h2>
+
+        <h1 id="temperature">--°C</h1>
+
+        <p id="description">Ob-havo ma'lumoti</p>
+
+        <p id="wind">💨 Shamol: --</p>
+
+        <!-- NAMLIK VA QUYOSH VAQTLARI -->
+        <div class="weather-details">
+          <div class="detail-card">
+            <span>💧 Namlik</span>
+            <h3 id="humidity">--%</h3>
+          </div>
+
+          <div class="detail-card">
+            <span>🌅 Quyosh chiqishi</span>
+            <h3 id="sunrise">--:--</h3>
+          </div>
+
+          <div class="detail-card">
+            <span>🌇 Quyosh botishi</span>
+            <h3 id="sunset">--:--</h3>
+          </div>
+        </div>
+      </section>
+
+      <!-- SOATLIK PROGNOZ -->
+      <section id="hourly">
+        <h2>Bugungi soatlik ob-havo 🕒</h2>
+
+        <div id="hourlyList"></div>
+      </section>
+
+      <!-- 7 KUNLIK PROGNOZ -->
+      <section id="forecast">
+        <h2>7 kunlik ob-havo 📅</h2>
+
+        <div id="forecastList"></div>
+      </section>
+    </main>
+
+    <!-- JAVASCRIPT ULANISHI -->
+    <script src="script.js"></script>
+  </body>
+</html>

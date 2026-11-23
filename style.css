@@ -1,0 +1,876 @@
+/* =====================================
+   WEATHER APP — TO'LIQ DIZAYN
+   DESKTOP + TELEFON
+===================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --glass: rgba(255, 255, 255, 0.09);
+  --border: rgba(255, 255, 255, 0.15);
+  --text: #ffffff;
+  --muted: #b9c5df;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: var(--text);
+  background: radial-gradient(
+      circle at 15% 15%,
+      rgba(70, 90, 220, 0.35),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      rgba(140, 60, 220, 0.25),
+      transparent 35%
+    ),
+    linear-gradient(135deg, #080e24, #101b3b 55%, #17102e);
+  background-attachment: fixed;
+}
+
+/* ASOSIY CONTAINER */
+
+.weather-container {
+  width: 100%;
+  max-width: 1180px;
+  padding: 34px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    "title title"
+    "search search"
+    "weather forecast"
+    "hourly hourly";
+  gap: 22px;
+  align-items: stretch;
+  background: rgba(10, 13, 38, 0.72);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 30px;
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.42);
+  animation: appear 0.8s ease;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* SARLAVHA */
+
+.weather-container > h1 {
+  grid-area: title;
+  width: 100%;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 5px;
+  background: linear-gradient(90deg, #fff, #83c5ff, #bd9aff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* QIDIRUV */
+
+.search-box {
+  grid-area: search;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-width: 0;
+}
+
+.weather-container input {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 20px;
+  color: white;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.weather-container input::placeholder {
+  color: #aab7d2;
+}
+
+.weather-container input:focus {
+  border-color: #69b5ff;
+  box-shadow: 0 0 0 4px rgba(80, 160, 255, 0.12);
+}
+
+.weather-container button {
+  padding: 16px 25px;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #398bff, #8054f5);
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.weather-container button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(80, 100, 255, 0.4);
+}
+
+.weather-container button:active {
+  transform: scale(0.97);
+}
+
+.weather-container button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* XABARLAR */
+
+.status-message {
+  flex: 0 0 100%;
+  width: 100%;
+  min-height: 22px;
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.status-message.error {
+  color: #ff7777;
+}
+
+.status-message.success {
+  color: #72f5ae;
+}
+
+#searchBtn.loading {
+  opacity: 0.7;
+  cursor: wait;
+  animation: loadingPulse 1s infinite alternate;
+}
+
+@keyframes loadingPulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.96);
+  }
+}
+
+/* UMUMIY KARTALAR */
+
+#weather,
+#hourly,
+#forecast {
+  min-width: 0;
+  padding: 25px;
+  background: rgba(9, 12, 35, 0.48);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  transition: 0.3s;
+}
+
+#weather:hover,
+#hourly:hover,
+#forecast:hover {
+  border-color: rgba(130, 170, 255, 0.35);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+/* HOZIRGI OB-HAVO */
+
+#weather {
+  grid-area: weather;
+  text-align: center;
+  min-height: 100%;
+}
+
+#cityName {
+  font-size: 23px;
+  color: #d9e8ff;
+}
+
+#temperature {
+  font-size: clamp(55px, 7vw, 82px);
+  font-weight: 800;
+  margin: 15px 0;
+  background: linear-gradient(180deg, #fff, #8ecbff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+#description {
+  color: #d8e5ff;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+#wind {
+  color: var(--muted);
+  font-size: 15px;
+  margin-top: 15px;
+}
+
+/* NAMLIK VA QUYOSH */
+
+.weather-details {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.detail-card {
+  min-width: 0;
+  padding: 15px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 17px;
+  transition: 0.3s;
+}
+
+.detail-card:hover {
+  transform: translateY(-5px);
+  background: rgba(80, 140, 255, 0.18);
+}
+
+.detail-card span {
+  display: block;
+  color: #b9c5df;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.detail-card h3 {
+  font-size: 17px;
+  color: white;
+  overflow-wrap: anywhere;
+}
+
+/* KUNLIK PROGNOZ */
+
+#forecast {
+  grid-area: forecast;
+  min-height: 100%;
+}
+
+#forecast h2 {
+  font-size: 21px;
+  margin-bottom: 15px;
+  color: #e5edff;
+}
+
+#forecastList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.forecast-day {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 45px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: 0.3s;
+}
+
+.forecast-day:hover {
+  transform: translateY(-3px);
+  background: rgba(90, 140, 255, 0.17);
+}
+
+.forecast-day p {
+  color: #d2def6;
+  font-size: 14px;
+}
+
+.forecast-day p:first-child {
+  text-align: left;
+}
+
+.forecast-day h2 {
+  font-size: 26px;
+  text-align: center;
+}
+
+.forecast-day p:last-child {
+  text-align: right;
+  white-space: nowrap;
+  font-weight: 600;
+  color: white;
+}
+
+/* SOATLIK PROGNOZ */
+
+#hourly {
+  grid-area: hourly;
+  width: 100%;
+}
+
+#hourly h2 {
+  font-size: 21px;
+  margin-bottom: 15px;
+  color: #e5edff;
+}
+
+#hourlyList {
+  display: flex;
+  gap: 13px;
+  overflow-x: auto;
+  padding: 10px 3px 15px;
+  scrollbar-width: thin;
+  scrollbar-color: #657ab4 transparent;
+}
+
+.hourly-item {
+  flex: 0 0 83px;
+  min-width: 83px;
+  padding: 17px 10px;
+  text-align: center;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: 0.3s;
+}
+
+.hourly-item:hover {
+  transform: translateY(-6px);
+  background: rgba(90, 140, 255, 0.2);
+}
+
+.hourly-item p {
+  color: #c6d3ef;
+  font-size: 13px;
+  margin: 7px 0;
+  white-space: nowrap;
+}
+
+.hourly-item h2 {
+  font-size: 25px;
+  margin: 12px 0;
+}
+
+/* OB-HAVO EFFEКTLARI */
+
+body.rainy::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  background-image: radial-gradient(2px 8px at 20px 30px, white, transparent),
+    radial-gradient(2px 8px at 80px 90px, white, transparent),
+    radial-gradient(2px 8px at 140px 50px, white, transparent);
+  background-size: 250px 180px;
+  animation: rainFall 2s linear infinite;
+}
+
+@keyframes rainFall {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 40px 180px;
+  }
+}
+
+body.sunny::after {
+  content: "☀️";
+  position: fixed;
+  top: 30px;
+  right: 35px;
+  font-size: 65px;
+  animation: sunMove 4s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes sunMove {
+  from {
+    transform: rotate(-15deg);
+  }
+  to {
+    transform: rotate(15deg);
+  }
+}
+
+body.snowy::after {
+  content: "❄️ ❄️ ❄️ ❄️ ❄️";
+  position: fixed;
+  top: -40px;
+  left: 0;
+  width: 100%;
+  font-size: 30px;
+  word-spacing: 25px;
+  animation: snowFall 5s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes snowFall {
+  from {
+    transform: translateY(-40px);
+  }
+  to {
+    transform: translateY(100vh);
+  }
+}
+
+body.cloudy::before,
+body.cloudy::after {
+  display: none !important;
+  content: none !important;
+}
+
+body.stormy::after,
+body.stormy::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20;
+  animation: lightning 4s infinite;
+}
+
+@keyframes lightning {
+  0%,
+  85%,
+  100% {
+    opacity: 0;
+  }
+  86% {
+    opacity: 0.7;
+  }
+  87% {
+    opacity: 0;
+  }
+  89% {
+    opacity: 0.5;
+  }
+  90% {
+    opacity: 0;
+  }
+}
+
+/* =====================================
+   TABLET
+===================================== */
+
+@media (min-width: 651px) and (max-width: 850px) {
+  body {
+    padding: 22px 14px;
+  }
+
+  .weather-container {
+    padding: 22px;
+    gap: 16px;
+  }
+
+  #weather,
+  #forecast,
+  #hourly {
+    padding: 19px;
+  }
+
+  #forecastList {
+    grid-template-columns: 1fr;
+  }
+
+  .forecast-day {
+    padding: 12px 9px;
+    gap: 6px;
+  }
+}
+
+/* =====================================
+   TELEFON
+===================================== */
+
+@media (max-width: 650px) {
+  html,
+  body {
+    width: 100%;
+    min-width: 320px;
+    overflow-x: hidden;
+  }
+
+  body {
+    display: block;
+    min-height: 100vh;
+    padding: 16px 12px 28px;
+    background: radial-gradient(
+        ellipse at 50% 0%,
+        rgba(139, 74, 224, 0.42),
+        transparent 48%
+      ),
+      linear-gradient(180deg, #24163d 0%, #171426 45%, #10111b 100%);
+    background-attachment: scroll;
+  }
+
+  .weather-container {
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    animation: none;
+  }
+
+  .weather-container > h1 {
+    order: 0;
+    margin: 4px 0 2px;
+    text-align: center;
+    font-size: 23px;
+    color: #fff;
+    background: none;
+    -webkit-text-fill-color: #fff;
+  }
+
+  /* QIDIRUV */
+
+  .search-box {
+    order: 1;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 7px;
+    border-radius: 17px;
+    background: rgba(12, 13, 25, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .weather-container input {
+    flex: 1 1 auto;
+    width: 0;
+    min-width: 0;
+    padding: 12px 11px;
+    color: #fff;
+    font-size: 13px;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+  }
+
+  .weather-container input::placeholder {
+    color: #9293a6;
+  }
+
+  .weather-container button {
+    flex: 0 0 auto;
+    width: auto;
+    padding: 11px 15px;
+    border-radius: 12px;
+    font-size: 13px;
+    background: linear-gradient(135deg, #8758ed, #5c46c9);
+  }
+
+  .status-message {
+    font-size: 12px;
+    padding: 2px 5px 4px;
+  }
+
+  /* HOZIRGI OB-HAVO */
+
+  #weather {
+    order: 2;
+    width: 100%;
+    min-height: auto;
+    padding: 21px 19px 17px;
+    text-align: center;
+    border-radius: 24px;
+    background: radial-gradient(
+        circle at 85% 18%,
+        rgba(113, 75, 202, 0.22),
+        transparent 32%
+      ),
+      linear-gradient(145deg, #191a29, #10111b 72%);
+    border: 1px solid rgba(255, 255, 255, 0.075);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.27);
+  }
+
+  #cityName {
+    font-size: 15px;
+    color: #aeb0c5;
+  }
+
+  #temperature {
+    margin: 8px 0;
+    font-size: clamp(62px, 18vw, 82px);
+    line-height: 0.98;
+    letter-spacing: -3px;
+  }
+
+  #description {
+    margin-top: 5px;
+    font-size: 13px;
+    color: #c4c3d3;
+  }
+
+  #wind {
+    margin-top: 15px;
+    font-size: 12px;
+    color: #a7a8bb;
+  }
+
+  /* NAMLIK VA QUYOSH */
+
+  .weather-details {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .detail-card {
+    padding: 12px 5px;
+    min-height: 74px;
+    text-align: center;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.055);
+    border: 1px solid rgba(255, 255, 255, 0.055);
+  }
+
+  .detail-card span {
+    min-height: 27px;
+    margin-bottom: 7px;
+    font-size: 10px;
+    line-height: 1.3;
+    color: #a5a6b9;
+  }
+
+  .detail-card h3 {
+    font-size: 15px;
+    color: #f8f7ff;
+  }
+
+  /* SOATLIK */
+
+  #hourly {
+    order: 3;
+    width: 100%;
+    padding: 17px 15px 13px;
+    border-radius: 22px;
+    background: linear-gradient(145deg, #191a29, #11121d);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  #hourly h2,
+  #forecast h2 {
+    margin-bottom: 13px;
+    font-size: 16px;
+    color: #f4f2ff;
+  }
+
+  #hourlyList {
+    display: flex;
+    gap: 9px;
+    margin: 0 -2px;
+    padding: 3px 2px 10px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #hourlyList::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hourly-item {
+    flex: 0 0 65px;
+    min-width: 65px;
+    padding: 11px 7px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.055);
+    border: 1px solid rgba(255, 255, 255, 0.045);
+  }
+
+  .hourly-item p {
+    margin: 6px 0;
+    font-size: 10px;
+    color: #aeb0c3;
+  }
+
+  .hourly-item h2 {
+    margin: 8px 0;
+    font-size: 19px;
+    color: #fff;
+  }
+
+  /* KUNLIK */
+
+  #forecast {
+    order: 4;
+    width: 100%;
+    padding: 18px 15px;
+    border-radius: 22px;
+    background: linear-gradient(145deg, #191a29, #11121d);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  #forecastList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .forecast-day {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr);
+    align-items: center;
+    gap: 9px;
+    min-height: 58px;
+    padding: 10px 12px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(255, 255, 255, 0.045);
+  }
+
+  .forecast-day p {
+    font-size: 11px;
+    line-height: 1.35;
+    color: #b8b8ca;
+  }
+
+  .forecast-day p:first-child {
+    text-align: left;
+  }
+
+  .forecast-day h2 {
+    margin: 0;
+    font-size: 25px;
+    text-align: center;
+  }
+
+  .forecast-day p:last-child {
+    text-align: right;
+    font-size: 12px;
+    color: #f4f2ff;
+  }
+
+  /* TELEFONDA HOVERNI O'CHIRISH */
+
+  #weather:hover,
+  #hourly:hover,
+  #forecast:hover,
+  .forecast-day:hover,
+  .hourly-item:hover,
+  .detail-card:hover {
+    transform: none;
+  }
+
+  body.sunny::after {
+    top: 12px;
+    right: 14px;
+    font-size: 27px;
+    opacity: 0.65;
+  }
+
+  .weather-container {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* JUDA KICHIK TELEFON */
+
+@media (max-width: 380px) {
+  body {
+    padding: 12px 9px 22px;
+  }
+
+  .weather-container {
+    gap: 11px;
+  }
+
+  .weather-container > h1 {
+    font-size: 21px;
+  }
+
+  #weather {
+    padding: 18px 14px 14px;
+  }
+
+  #temperature {
+    font-size: 58px;
+  }
+
+  .detail-card {
+    padding: 10px 4px;
+  }
+
+  .detail-card span {
+    font-size: 9px;
+  }
+
+  .detail-card h3 {
+    font-size: 13px;
+  }
+
+  #hourly,
+  #forecast {
+    padding: 15px 12px;
+  }
+
+  .hourly-item {
+    flex-basis: 60px;
+    min-width: 60px;
+  }
+
+  .forecast-day {
+    grid-template-columns: minmax(0, 1fr) 36px minmax(0, 1fr);
+    gap: 5px;
+    padding: 9px;
+  }
+}
+
+/* HARAKATNI KAMAYTIRISH */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
