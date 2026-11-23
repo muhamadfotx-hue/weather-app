@@ -436,7 +436,7 @@ body.sunny::after {
   top: 30px;
   right: 35px;
   font-size: 65px;
-  animation: sunMove 4s ease-in-out infinite alternate;
+  animation: rainFall 0.45s linear infinite;
   pointer-events: none;
 }
 
