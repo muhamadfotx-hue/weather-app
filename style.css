@@ -1,6 +1,7 @@
+
 /* =====================================
    WEATHER APP — TO'LIQ DIZAYN
-   DESKTOP + TELEFON
+   DESKTOP + TABLET + TELEFON
 ===================================== */
 
 * {
@@ -28,16 +29,9 @@ body {
   align-items: flex-start;
   font-family: "Segoe UI", Arial, sans-serif;
   color: var(--text);
-  background: radial-gradient(
-      circle at 15% 15%,
-      rgba(70, 90, 220, 0.35),
-      transparent 35%
-    ),
-    radial-gradient(
-      circle at 85% 80%,
-      rgba(140, 60, 220, 0.25),
-      transparent 35%
-    ),
+  background:
+    radial-gradient(circle at 15% 15%, rgba(70, 90, 220, 0.35), transparent 35%),
+    radial-gradient(circle at 85% 80%, rgba(140, 60, 220, 0.25), transparent 35%),
     linear-gradient(135deg, #080e24, #101b3b 55%, #17102e);
   background-attachment: fixed;
 }
@@ -45,6 +39,8 @@ body {
 /* ASOSIY CONTAINER */
 
 .weather-container {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 1180px;
   padding: 34px;
@@ -383,52 +379,51 @@ body {
   margin: 12px 0;
 }
 
-/* OB-HAVO EFFEКTLARI */
+/* =====================================
+   TABIIY VA UZLUKSIZ YOMG'IR
+===================================== */
 
-body.rainy::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 10;
-  background-image: radial-gradient(2px 8px at 20px 30px, white, transparent),
-    radial-gradient(2px 8px at 80px 90px, white, transparent),
-    radial-gradient(2px 8px at 140px 50px, white, transparent);
-  background-size: 250px 180px;
-  animation: rainFall 2436326s linear infinite;
-}
-
-/* KUCHLI YOMG'IR */
 body.rainy::after {
   content: "";
   position: fixed;
   inset: -100px 0 0;
-  z-index: 10;
+  width: 100%;
+  height: calc(100% + 100px);
   pointer-events: none;
+  z-index: 10;
+  opacity: 0.65;
 
   background-image:
     repeating-linear-gradient(
       105deg,
       transparent 0px,
-      transparent 18px,
-      rgba(190, 220, 255, 0.65) 19px,
-      transparent 21px
+      transparent 15px,
+      rgba(210, 230, 255, 0.7) 16px,
+      transparent 17px
+    ),
+    repeating-linear-gradient(
+      105deg,
+      transparent 0px,
+      transparent 28px,
+      rgba(210, 230, 255, 0.4) 29px,
+      transparent 30px
     );
 
-  background-size: 45px 100px;
-  animation: rainFall 60s linear infinite;
-  opacity: 0.7;
+  background-size: 80px 120px, 130px 180px;
+  background-repeat: repeat;
+  animation: naturalRain 0.8s linear infinite;
 }
 
-@keyframes rainFall {
+@keyframes naturalRain {
   from {
-    background-position: 0 0;
+    background-position: 0 0, 0 0;
   }
   to {
-    background-position: -45px 100px;
+    background-position: -80px 120px, -130px 180px;
   }
 }
-}
+
+/* QUYOSH */
 
 body.sunny::after {
   content: "☀️";
@@ -436,8 +431,9 @@ body.sunny::after {
   top: 30px;
   right: 35px;
   font-size: 65px;
-  animation: rainFall 0.45s linear infinite;
+  animation: sunMove 3s ease-in-out infinite alternate;
   pointer-events: none;
+  z-index: 2;
 }
 
 @keyframes sunMove {
@@ -449,6 +445,8 @@ body.sunny::after {
   }
 }
 
+/* QOR */
+
 body.snowy::after {
   content: "❄️ ❄️ ❄️ ❄️ ❄️";
   position: fixed;
@@ -459,6 +457,7 @@ body.snowy::after {
   word-spacing: 25px;
   animation: snowFall 5s linear infinite;
   pointer-events: none;
+  z-index: 10;
 }
 
 @keyframes snowFall {
@@ -470,11 +469,15 @@ body.snowy::after {
   }
 }
 
+/* BULUTLI */
+
 body.cloudy::before,
 body.cloudy::after {
   display: none !important;
   content: none !important;
 }
+
+/* MOMOQALDIROQ */
 
 body.stormy::after,
 body.stormy::before {
@@ -515,65 +518,6 @@ body.stormy::before {
 @media (min-width: 651px) and (max-width: 850px) {
   body {
     padding: 22px 14px;
-       /* QIDIRUV — TELEFON */
-
-  .search-box {
-    order: 1;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    padding: 9px;
-    border-radius: 17px;
-    background: rgba(12, 13, 25, 0.82);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .weather-container input {
-    width: 100%;
-    min-width: 0;
-    padding: 14px 12px;
-    color: #fff;
-    font-size: 14px;
-    border: 0;
-    border-radius: 12px;
-    background: transparent;
-  }
-
-  .weather-container input::placeholder {
-    color: #9293a6;
-  }
-
-  .weather-container button {
-    width: auto;
-    padding: 13px 18px;
-    margin: 0;
-    white-space: nowrap;
-    border-radius: 12px;
-    font-size: 13px;
-    background: linear-gradient(135deg, #8758ed, #5c46c9);
-  }
-
-  .search-box .status-message {
-    display: block;
-    grid-column: 1 / -1;
-    width: 100%;
-    min-height: 20px;
-    margin: 0;
-    padding: 4px 5px;
-    text-align: center;
-    font-size: 12px;
-    font-weight: 600;
-  }
-
-  .search-box .status-message.success {
-    color: #72f5ae;
-  }
-
-  .search-box .status-message.error {
-    color: #ff7777;
-  }
   }
 
   .weather-container {
@@ -613,7 +557,8 @@ body.stormy::before {
     display: block;
     min-height: 100vh;
     padding: 16px 12px 28px;
-    background: radial-gradient(
+    background:
+      radial-gradient(
         ellipse at 50% 0%,
         rgba(139, 74, 224, 0.42),
         transparent 48%
@@ -646,15 +591,6 @@ body.stormy::before {
     color: #fff;
     background: none;
     -webkit-text-fill-color: #fff;
-
-     body.rainy::after,
-body.sunny::after,
-body.snowy::after,
-body.stormy::after,
-body.stormy::before {
-  display: none !important;
-  content: none !important;
-}
   }
 
   /* QIDIRUV */
@@ -709,7 +645,8 @@ body.stormy::before {
     padding: 21px 19px 17px;
     text-align: center;
     border-radius: 24px;
-    background: radial-gradient(
+    background:
+      radial-gradient(
         circle at 85% 18%,
         rgba(113, 75, 202, 0.22),
         transparent 32%
@@ -894,11 +831,6 @@ body.stormy::before {
     right: 14px;
     font-size: 27px;
     opacity: 0.65;
-  }
-
-  .weather-container {
-    position: relative;
-    z-index: 1;
   }
 }
 
