@@ -571,7 +571,7 @@ body.stormy::before {
   .search-box {
     order: 1;
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     gap: 8px;
     padding: 7px;
     border-radius: 17px;
