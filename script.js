@@ -1,3 +1,4 @@
+
 const button = document.getElementById("searchBtn");
 const cityInput = document.getElementById("city");
 
@@ -53,7 +54,9 @@ function getWeatherDescription(code) {
 
 // OB-HAVO ANIMATSIYASI
 function setWeatherAnimation(code) {
-  document.body.classList.remove("rainy", "snowy", "sunny", "cloudy", "stormy");
+  document.body.classList.remove(
+    "rainy", "snowy", "sunny", "cloudy", "stormy"
+  );
 
   if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) {
     document.body.classList.add("rainy");
@@ -110,7 +113,7 @@ async function getWeather() {
 
     const place = geoData.results[0];
 
-    // OB-HAVO API — 8 KUNLIK PROGNOZ
+    // OB-HAVO API
     const weatherURL =
       "https://api.open-meteo.com/v1/forecast?latitude=" +
       place.latitude +
@@ -145,7 +148,7 @@ async function getWeather() {
     document.getElementById("temperature").textContent =
       Math.round(current.temperature_2m) + "°C";
 
-    // OB-HAVO TAVSIFI
+    // OB-HAVO
     document.getElementById("description").textContent =
       getWeatherIcon(current.weather_code) +
       " " +
@@ -153,21 +156,23 @@ async function getWeather() {
 
     // SHAMOL
     document.getElementById("wind").textContent =
-      "💨 Shamol: " + Math.round(current.wind_speed_10m) + " km/soat";
+      "💨 Shamol: " +
+      Math.round(current.wind_speed_10m) +
+      " km/soat";
 
     // NAMLIK
     document.getElementById("humidity").textContent =
       current.relative_humidity_2m + "%";
 
     // QUYOSH CHIQISHI
-    document.getElementById("sunrise").textContent = formatTime(
-      daily.sunrise[0]
-    );
+    document.getElementById("sunrise").textContent =
+      formatTime(daily.sunrise[0]);
 
     // QUYOSH BOTISHI
-    document.getElementById("sunset").textContent = formatTime(daily.sunset[0]);
+    document.getElementById("sunset").textContent =
+      formatTime(daily.sunset[0]);
 
-    // OB-HAVO ANIMATSIYASI
+    // ANIMATSIYA
     setWeatherAnimation(current.weather_code);
 
     // 8 KUNLIK PROGNOZ
@@ -181,12 +186,11 @@ async function getWeather() {
       "Chorshanba",
       "Payshanba",
       "Juma",
-      "Shanba",
+      "Shanba"
     ];
 
     for (let i = 0; i < daily.time.length; i++) {
       const date = new Date(daily.time[i] + "T12:00:00");
-
       const day = i === 0 ? "Bugun" : days[date.getDay()];
 
       const max = Math.round(daily.temperature_2m_max[i]);
@@ -197,10 +201,10 @@ async function getWeather() {
       item.className = "forecast-day";
 
       item.innerHTML = `
-                <p>${day}</p>
-                <h2>${icon}</h2>
-                <p>${max}°C / ${min}°C</p>
-            `;
+        <p>${day}</p>
+        <h2>${icon}</h2>
+        <p>${max}°C / ${min}°C</p>
+      `;
 
       forecastList.appendChild(item);
     }
@@ -210,7 +214,6 @@ async function getWeather() {
     hourlyList.innerHTML = "";
 
     const currentTime = current.time.slice(0, 13) + ":00";
-
     let count = 0;
 
     for (let i = 0; i < hourly.time.length; i++) {
@@ -224,24 +227,25 @@ async function getWeather() {
       item.className = "hourly-item";
 
       item.innerHTML = `
-                <p>${count === 0 ? "Hozir" : hour}</p>
-                <h2>${icon}</h2>
-                <p>${temp}°C</p>
-            `;
+        <p>${count === 0 ? "Hozir" : hour}</p>
+        <h2>${icon}</h2>
+        <p>${temp}°C</p>
+      `;
 
       hourlyList.appendChild(item);
 
       count++;
-
       if (count === 24) break;
     }
 
     showMessage("Ob-havo muvaffaqiyatli yuklandi! ☀️", "success");
 
-    console.log("24 soatlik va 8 kunlik prognoz yuklandi!");
+    console.log("Prognoz yuklandi!");
+
   } catch (error) {
     console.error("XATO:", error);
     showMessage(error.message || "Noma'lum xatolik yuz berdi!");
+
   } finally {
     button.disabled = false;
     button.textContent = "Qidirish";
@@ -253,14 +257,18 @@ async function getWeather() {
 button.addEventListener("click", getWeather);
 
 // ENTER TUGMASI
-cityInput.addEventListener("keydown", function (event) {
+cityInput.addEventListener("keydown", function(event) {
   if (event.key === "Enter") {
     getWeather();
   }
 });
 
-// SAYT OCHILGANDA TOSHKENT
-cityInput.value = "Toshkent";
-getWeather();
+// SAYT OCHILGANDA BO'SH TURADI
+cityInput.value = "";
+clearMessage();
+
+cityInput.addEventListener("input", function() {
+  clearMessage();
+});
 
 console.log("Premium Weather App ishga tushdi!");
