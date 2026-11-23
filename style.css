@@ -399,7 +399,7 @@ background-image:
   radial-gradient(0.3px 2px at 200px 120px, rgba(210,230,255,0.7), transparent);
 
   background-size: 250px 180px;
-  animation: rainFall 1.2s linear infinite;
+  animation: rainFall 5s linear infinite;
 }
 
 @keyframes rainFall {
